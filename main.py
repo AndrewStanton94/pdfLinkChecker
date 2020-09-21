@@ -1,9 +1,9 @@
+#!/usr/bin/python
+
 import json
 import codecs
 import pdfx
 from checkLinks import check_refs
-
-# pdf = pdfx.PDFx("pdf/policy-118.pdf")
 
 
 def processPDF(name, domain):
@@ -48,7 +48,12 @@ def processPDF(name, domain):
 
 
 domain = "port.ac.uk"
-pdfsToProcess = set(["policy-118.pdf"])
+
+with open('pdfsToCheck.txt', 'r') as file:
+    files = [line.replace('\n', '') for line in file.readlines()]
+
+pdfsToProcess = set(files)
+print(pdfsToProcess)
 processedPDFs = []
 
 # Take a PDF, process it, mark it as done, save any new PDFs that haven't been processed
@@ -56,8 +61,11 @@ while pdfsToProcess:
     print("todo: ", len(pdfsToProcess))
     print("done: ", len(processedPDFs))
     currentPDF = pdfsToProcess.pop()
-    pdfsToAdd = processPDF(currentPDF, domain)
     processedPDFs.append(currentPDF)
-    newPDFs = [pdf for pdf in pdfsToAdd if pdf not in processedPDFs]
-    for newPDF in newPDFs:
-        pdfsToProcess.add(newPDF)
+    try:
+        pdfsToAdd = processPDF(currentPDF, domain)
+        newPDFs = [pdf for pdf in pdfsToAdd if pdf not in processedPDFs]
+        for newPDF in newPDFs:
+            pdfsToProcess.add(newPDF)
+    except:
+        print("Error in :", currentPDF)
