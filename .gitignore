@@ -1,4 +1,8 @@
 output/
+pdfs/
+pdfsToCheck.txt
+remotePDFs.txt
+results.csv
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
